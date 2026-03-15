@@ -296,6 +296,249 @@
                         </div>
                     </div>
                 </div>
+                 <style>
+        /* ========== 在线人数显示样式 ========== */
+        .online-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px auto;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,140,0,0.1));
+            border: 1px solid rgba(255,215,0,0.5);
+            border-radius: 20px;
+            padding: 8px 20px;
+            backdrop-filter: blur(10px);
+            animation: counter-pulse 2s ease-in-out infinite;
+        }
+        
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: dot-blink 1s ease-in-out infinite;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        
+        .online-text {
+            color: #ffd700;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .online-number {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .online-number.jump {
+            animation: numberJump 0.4s ease-out;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00;
+        }
+        
+        @keyframes numberJump {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes dot-blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        @keyframes counter-pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+            50% { box-shadow: 0 0 20px rgba(255,215,0,0.6); }
+        }
+        
+        /* ========== 实时提现（奖励墙）样式 ========== */
+        .reward-wall {
+            max-width: 320px;
+            margin: 15px auto 0;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,140,0,0.1) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            border-radius: 12px;
+            padding: 10px 15px;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.2),
+                inset 0 0 20px rgba(255, 215, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .reward-wall-title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .reward-scroll-container {
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .reward-scroll-content {
+            animation: scroll-up 10s linear infinite;
+        }
+        
+        .reward-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 0;
+            white-space: nowrap;
+            font-size: 12px;
+            border-bottom: 1px dashed rgba(255, 215, 0, 0.2);
+        }
+        
+        .reward-item:last-child {
+            border-bottom: none;
+        }
+        
+        .reward-icon-small {
+            font-size: 14px;
+        }
+        
+        .reward-user {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .reward-action {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .reward-money {
+            color: #ff6b6b;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+        }
+        
+        @keyframes scroll-up {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+        
+        /* 页面基础样式 */
+
+        
+        h2 {
+            color: #ffd700;
+            margin: 30px 0 15px;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        
+        .demo-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+<body>
+    
+    <!-- ========== 1. 在线人数 HTML代码 ========== -->
+    
+        <!-- 在线人数显示 -->
+        <div class="online-counter" id="onlineCounter">
+            <div class="online-dot"></div>
+            <span class="online-text">当前在线</span>
+            <span class="online-number" id="onlineNumber">930
+			</span>
+        </div>
+    
+    
+    <!-- ========== 2. 实时提现 HTML代码 ========== -->
+    
+ 
+    
+    <!-- ========== JavaScript 功能代码 ========== -->
+    <script>
+        // ========== 在线人数动态更新 ==========
+        let currentOnline = 912;
+        const onlineNumberEl = document.getElementById('onlineNumber');
+        
+        function updateOnlineNumber() {
+            // 随机增减人数（模拟真实波动）
+            const change = Math.floor(Math.random() * 50) - 20;
+            currentOnline += change;
+            // 保持在合理范围
+            if (currentOnline < 800) currentOnline = 800;
+            if (currentOnline > 5000) currentOnline = 5000;
+            
+            // 添加跳动动画
+            onlineNumberEl.classList.add('jump');
+            setTimeout(() => {
+                onlineNumberEl.classList.remove('jump');
+            }, 400);
+            
+            // 格式化数字
+            onlineNumberEl.textContent = currentOnline.toLocaleString();
+        }
+        
+        // 每3秒更新一次在线人数
+        setInterval(updateOnlineNumber, 3000);
+        
+        // ========== 实时提现滚动墙系统 ==========
+        const rewardScrollContent = document.getElementById('rewardScrollContent');
+        const rewardNames = ['张**老板', '李**老板', '王**老板', '刘**老板', '陈**老板', '杨**老板', '赵**老板', '黄**老板', '周**老板', '吴**老板'];
+        const rewardAmounts = ['¥1,888', '¥3,888', '¥5,888', '¥8,888', '¥10,000', '¥18,888', '¥28,888', '¥66,666'];
+        const rewardActions = ['刚提现', '中奖', '充值', '赢得'];
+        
+        function generateRewardItems() {
+            let html = '';
+            // 生成10条数据（5条显示，5条用于循环）
+            for (let i = 0; i < 10; i++) {
+                const randomName = rewardNames[Math.floor(Math.random() * rewardNames.length)];
+                const randomAmount = rewardAmounts[Math.floor(Math.random() * rewardAmounts.length)];
+                const randomAction = rewardActions[Math.floor(Math.random() * rewardActions.length)];
+                html += `
+                    <div class="reward-item">
+                        <span class="reward-icon-small">🎉</span>
+                        <span class="reward-user">${randomName}</span>
+                        <span class="reward-action">${randomAction}</span>
+                        <span class="reward-money">${randomAmount}</span>
+                    </div>
+                `;
+            }
+            rewardScrollContent.innerHTML = html;
+        }
+        
+        // 初始化生成奖励条目
+        generateRewardItems();
+        
+        // 每5秒更新一条数据
+        function updateRewardItem() {
+            const items = rewardScrollContent.querySelectorAll('.reward-item');
+            const randomIndex = Math.floor(Math.random() * items.length);
+            const randomName = rewardNames[Math.floor(Math.random() * rewardNames.length)];
+            const randomAmount = rewardAmounts[Math.floor(Math.random() * rewardAmounts.length)];
+            const randomAction = rewardActions[Math.floor(Math.random() * rewardActions.length)];
+            
+            items[randomIndex].innerHTML = `
+                <span class="reward-icon-small">🎉</span>
+                <span class="reward-user">${randomName}</span>
+                <span class="reward-action">${randomAction}</span>
+                <span class="reward-money">${randomAmount}</span>
+            `;
+        }
+        
+        setInterval(updateRewardItem, 5000);
+    </script>
+    
+</body>
                 <div class="app-box">
                     <a href="javascript:;">
               <img src="./skin/6ee70038418c4a5c951fca66db9ed086.png">
